@@ -1,26 +1,31 @@
-import React, { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import confetti from 'canvas-confetti'
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import confetti from 'canvas-confetti';
+import ChatbotApp from './ChatbotApp';
 
 function Chat() {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const formData = location.state?.formData
+    const location = useLocation();
+    const navigate = useNavigate();
+    const formData = location.state?.formData;
 
     useEffect(() => {
-        if (formData.name && formData.subject) {
+        if (!formData || !formData.name) {
+            // Gérer le cas où formData n'est pas défini ou formData.name est absent
+            console.error("Erreur: Les données du formulaire ne sont pas valides.");
+            navigate('/'); // Rediriger vers la page d'accueil en cas d'erreur
+        } else {
+            // Effectuer l'animation uniquement si les données du formulaire sont valides
             confetti({
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.6 },
-            })
-        } else {
-            navigate('/')
+            });
         }
-    }, [formData, navigate])
+    }, [formData, navigate]);
 
     if (!formData) {
-        return null
+        // Si formData est toujours indéfini, vous pouvez gérer cela ici
+        return <div>Chargement...</div>;
     }
 
     return (
@@ -33,13 +38,15 @@ function Chat() {
                 <div className="form-floating mb-3">
                     <textarea
                         className="form-control"
-                        placeholder="Pose ta question ici"    
+                        placeholder="Pose ta question ici"
                     ></textarea>
                 </div>
-                <button className='btn  btn-warning rounded-pill' type="submit">Envoyer</button>
+                <button className='btn btn-warning rounded-pill' type="submit">Envoyer</button>
             </form>
+
+            <ChatbotApp />
         </main>
-    )
+    );
 }
 
-export default Chat
+export default Chat;
