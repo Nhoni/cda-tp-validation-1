@@ -65,9 +65,9 @@ function Chat() {
         if (formData.name && formData.subject) {
             // Si le prénom et le sujet existent, déclenche une animation de confettis
             confetti({
-                particleCount: 1000,
+                particleCount: 100,
                 spread: 70,
-                origin: { y: 0.7 },
+                origin: { y: 0.5 },
             });
         } else {
             navigate('/'); // Redirige vers la page d'accueil si les données ne sont pas présentes
