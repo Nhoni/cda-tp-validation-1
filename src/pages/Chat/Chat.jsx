@@ -50,7 +50,7 @@ function Chat() {
         } catch (err) {
             // En cas d'erreur, mise à jour de l'état avec un message d'erreur
             setApiResponse("Something is going wrong, Please try again.");
-        } finally {
+;        } finally {
             setLoading(false); // Désactive le chargement, quelle que soit l'issue de la requête
         }
     }
