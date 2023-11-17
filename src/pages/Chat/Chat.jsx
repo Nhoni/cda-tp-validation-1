@@ -5,7 +5,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 
 // Récupération de la clé API depuis les variables d'environnement
-const APIKey = import.meta.env.local.VITE_REACT_APP_OPENAI_API_KEY;
+const APIKey = import.meta.env.VITE_REACT_APP_OPENAI_API_KEY;
+
 
 // Définition du composant Chat
 function Chat() {
