@@ -12,7 +12,7 @@ function Chat() {
     // Récupération de l'objet location et de la fonction navigate depuis react-router-dom
     const location = useLocation();
     const navigate = useNavigate();
-
+ 
     // Récupération des données du formulaire depuis l'état de l'emplacement (location)
     const formData = location.state?.formData;
 
