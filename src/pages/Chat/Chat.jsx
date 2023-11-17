@@ -1,31 +1,62 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import confetti from 'canvas-confetti';
-import ChatbotApp from './ChatbotApp';
+import React, { useEffect, useState } from 'react'
+import { OpenAI } from 'openai'
+import { useLocation, useNavigate } from 'react-router-dom'
+import confetti from 'canvas-confetti'
+const APIKey = import.meta.env.VITE_REACT_APP_OPENAI_API_KEY
 
 function Chat() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const formData = location.state?.formData;
+    const location = useLocation()
+    const navigate = useNavigate()
+    const formData = location.state?.formData
+
+    const [apiResponse, setApiResponse] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [QuestData, setQuestData] = useState("")
+
+    const openai = new OpenAI({
+        apiKey: APIKey, // defaults to process.env["OPENAI_API_KEY"]
+        dangerouslyAllowBrowser: true,
+    })
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        console.log(formData.subject)
+        try {
+            const result = await openai.chat.completions.create({
+                model: "gpt-4-1106-preview",
+                messages: [
+                    { role: 'system', content: `adresse toi a l'user avec son prenom ${formData.name}` },
+                    { role: 'system', content: `Tu ne dois donnée des réponse que si ca concèrne strictement ${formData.subject}` },
+                    { role: 'user', content: QuestData }
+                ],
+            })
+            console.log(result)
+            setApiResponse(result.choices[0].message.content)
+        } catch (err) {
+            setApiResponse("Something is going wrong, Please try again.");
+        }
+        setLoading(false);
+    }
+
+    function handleQuestData(e) {
+        setQuestData(e.target.value)
+    }
 
     useEffect(() => {
-        if (!formData || !formData.name) {
-            // Gérer le cas où formData n'est pas défini ou formData.name est absent
-            console.error("Erreur: Les données du formulaire ne sont pas valides.");
-            navigate('/'); // Rediriger vers la page d'accueil en cas d'erreur
-        } else {
-            // Effectuer l'animation uniquement si les données du formulaire sont valides
+        if (formData.name && formData.subject) {
             confetti({
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.6 },
-            });
+            })
+        } else {
+            navigate('/')
         }
-    }, [formData, navigate]);
+    }, [formData, navigate])
 
     if (!formData) {
-        // Si formData est toujours indéfini, vous pouvez gérer cela ici
-        return <div>Chargement...</div>;
+        return null
     }
 
     return (
@@ -39,14 +70,18 @@ function Chat() {
                     <textarea
                         className="form-control"
                         placeholder="Pose ta question ici"
+                        onChange={handleQuestData}
                     ></textarea>
                 </div>
-                <button className='btn btn-warning rounded-pill' type="submit">Envoyer</button>
+                <button className='btn btn-warning rounded-pill' type="submit" onClick={handleSubmit} disabled={loading || QuestData.length == 0}>{loading ? "Loading..." : "Envoyer"}</button>
             </form>
-
-            <ChatbotApp />
+            <section style={{maxWidth:'70vw', marginTop: '1rem', border: '1px solid black', borderRadius:'10px', padding: '1rem'}}>
+                <h6>{QuestData}</h6>
+                <p>{apiResponse}</p>
+            </section>
         </main>
-    );
+    )
 }
 
-export default Chat;
+
+export default Chat

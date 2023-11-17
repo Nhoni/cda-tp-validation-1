@@ -8,17 +8,18 @@ function App() {
     const [formData, setFormData] = useState({})
     const [showToast, setShowToast] = useState(false)
     const navigate = useNavigate()
-
+    
     const handleFormSubmit = data => {
         setFormData(data)
         setShowToast(true)
-
+        
         console.log('Données reçues du formulaire:', data)
         setTimeout(() => {
             setShowToast(false)
         }, 6000)
         navigate('/chat', { state: { formData: data } })
     }
+    // console.log(formData)
 
     return (
         <main className="form-signin col-md-4 col-sm-10 m-auto">
