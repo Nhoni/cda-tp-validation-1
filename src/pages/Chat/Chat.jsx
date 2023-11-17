@@ -103,7 +103,7 @@ function Chat() {
                 </button>
             </form>
             {/* Section pour afficher la question et la réponse */}
-            <section style={{maxWidth:'70vw', marginTop: '1rem', border: '1px solid black', borderRadius:'10px', padding: '1rem'}}>
+            <section style={{maxWidth:'70vw', marginTop: '1rem', border: '1px solid black', borderRadius:'10px', padding: '0.5rem'}}>
                 {/* Affichage de la question actuelle */}
                 <h6>{QuestData}</h6>
                 {/* Affichage de la réponse de l'API */}
