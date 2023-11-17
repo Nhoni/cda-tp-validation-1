@@ -46,9 +46,9 @@ function Chat() {
     useEffect(() => {
         if (formData.name && formData.subject) {
             confetti({
-                particleCount: 100,
+                particleCount: 1000,
                 spread: 70,
-                origin: { y: 0.6 },
+                origin: { y: 0.7 },
             })
         } else {
             navigate('/')
